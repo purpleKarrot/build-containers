@@ -23,4 +23,9 @@ $(IMAGES): base
 display_images:
 	for image in $(IMAGES); do echo $$image; done
 
+prefix=/usr/local
+
+install:
+	install -m 0755 bin/cibuild $(prefix)/bin
+
 .PHONY: base $(IMAGES)

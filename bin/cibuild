@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if (( $# < 1 )); then
+  echo "Insufficient parameters are insufficient." >&2
+  exit 1
+fi
+
+mkdir -p build/$1
+docker run --rm -h $(hostname) \
+  -v $(pwd):/source:ro \
+  -v $(pwd)/build/$1:/binary:rw \
+  -e BUILD_NAME=$1 \
+  -e BUILDER_UID=$(id -u) \
+  -e BUILDER_GID=$(id -g) \
+  -e BUILDER_USER=$(id -un) \
+  -e BUILDER_GROUP=$(id -gn) \
+  purplekarrot/"$@"

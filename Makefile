@@ -8,7 +8,6 @@ ORG = purplekarrot
 IMAGES = \
 	clang-3.8 \
 	clang-3.9 \
-	clang-4.0 \
 	gcc-5 \
 	gcc-6
 

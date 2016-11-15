@@ -1,4 +1,4 @@
-FROM debian:sid
+FROM debian:stretch
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

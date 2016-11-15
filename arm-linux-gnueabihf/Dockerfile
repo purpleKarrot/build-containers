@@ -1,5 +1,9 @@
 FROM purplekarrot/base
 
+RUN apt-get update
+    && apt-get install -y --no-install-recommends qemu-user \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PKG_CONFIG_LIBDIR=/usr/lib/arm-linux-gnueabihf/pkgconfig:/opt/qt5/lib/pkgconfig \
     PKG_CONFIG_SYSROOT_DIR=/
 

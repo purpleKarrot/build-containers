@@ -6,6 +6,7 @@ ORG = purplekarrot
 
 # List of builder images
 IMAGES = \
+	android-ndk-r13b \
 	arm-linux-gnueabihf \
 	clang-3.8 \
 	clang-3.9 \

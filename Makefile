@@ -6,6 +6,7 @@ ORG = purplekarrot
 
 # List of builder images
 IMAGES = \
+	arm-linux-gnueabihf \
 	clang-3.8 \
 	clang-3.9 \
 	gcc-5 \

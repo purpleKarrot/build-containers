@@ -37,4 +37,4 @@ if(CTEST_MEMORYCHECK_COMMAND OR CTEST_MEMORYCHECK_TYPE)
   ctest_memcheck(${test_args})
 endif()
 
-#ctest_submit()
+ctest_submit()

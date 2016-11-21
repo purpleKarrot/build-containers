@@ -1,6 +1,6 @@
 FROM purplekarrot/base
 
-RUN apt-get update
+RUN apt-get update \
     && apt-get install -y --no-install-recommends qemu-user \
     && rm -rf /var/lib/apt/lists/*
 
@@ -12,42 +12,48 @@ RUN dpkg --add-architecture armhf \
         g++-arm-linux-gnueabihf \
         libfontconfig1-dev:armhf \
         libfreetype6-dev:armhf \
+        libharfbuzz-dev:armhf \
+        libjpeg-dev:armhf \
+        libpcre3-dev:armhf \
+        libpng-dev:armhf \
         libx11-dev:armhf \
+        libx11-xcb-dev:armhf \
+        libxcb-glx0-dev:armhf \
+        libxcb1-dev:armhf \
         libxext-dev:armhf \
         libxfixes-dev:armhf \
         libxi-dev:armhf \
+        libxkbcommon-dev:armhf \
         libxrender-dev:armhf \
-        libxcb1-dev:armhf \
-        libx11-xcb-dev:armhf \
-        libxcb-glx0-dev:armhf \
+        zlib1g-dev:armhf \
     && rm -rf /var/lib/apt/lists/*
 
 # TODO: (to save a little time and space)
 #   * install qtbase5-dev-tools permanently
 #   * install qt5-qmake during the build
 #   * build qt with qmake without bootstrapping
-#   * use system zlib jpeg pcre sqlite tiff ?
 
 RUN buildDeps='g++ git python' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-    && git clone --recursive --branch v5.6.2 git://code.qt.io/qt/qt5.git \
+    && git clone --branch v5.6.2 git://code.qt.io/qt/qt5.git \
     && cd qt5 \
+    && ./init-repository --module-subset=essential,qtconnectivity,qtlocation,qtserialbus,qtserialport \
     && ./configure -opensource -confirm-license -release -static \
         -prefix /opt/qt5 \
         -hostprefix /usr/local \
         -device linux-arm-generic-g++ \
         -device-option CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf- \
         -device-option DISTRO_OPTS=hard-float \
+        -system-zlib \
+        -system-libjpeg \
+        -system-libpng \
         -no-xcb \
+        -system-xkbcommon \
+        -system-freetype \
+        -system-pcre \
+        -system-harfbuzz \
         -nomake tests \
         -nomake examples \
-        -skip qtactiveqt \
-        -skip qtwebchannel \
-        -skip qtwebengine \
-        -skip qtwebkit \
-        -skip qtwebsockets \
-        -skip qtwebview \
-        -skip qtxmlpatterns \
     && make -j $(nproc) \
     && make install \
     && cd - \

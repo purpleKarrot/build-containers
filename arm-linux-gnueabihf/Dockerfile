@@ -62,3 +62,5 @@ RUN buildDeps='g++ git python' \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./toolchain.cmake /
+
+COPY ./cmake/Modules/FindQt5.cmake /usr/share/cmake-3.6/Modules/

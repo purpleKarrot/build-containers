@@ -1,11 +1,12 @@
 FROM debian:stretch
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    make \
-    runit \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        make \
+        runit \
+    && rm -rf /var/lib/apt/lists/*
 
 # Build and install ninja from source.
 RUN buildDeps='g++ git python' \
@@ -14,7 +15,7 @@ RUN buildDeps='g++ git python' \
     && cd ninja \
     && python configure.py --bootstrap \
     && mv ninja /usr/bin/ \
-    && cd .. \
+    && cd / \
     && rm -rf ninja \
     && apt-get purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
@@ -22,7 +23,7 @@ RUN buildDeps='g++ git python' \
 # Build and install CMake from source.
 RUN buildDeps='g++ git' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-    && git clone -b v3.7.0 --depth 1 git://cmake.org/cmake.git CMake \
+    && git clone -b v3.7.1 --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
     && cd build \

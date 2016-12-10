@@ -1,5 +1,7 @@
 set(CTEST_SOURCE_DIRECTORY "/source")
-set(CTEST_BINARY_DIRECTORY "/binary")
+set(CTEST_BINARY_DIRECTORY "/binary/@BUILD_CONFIG@")
+
+ctest_empty_binary_directory(${CTEST_BINARY_DIRECTORY})
 
 site_name(CTEST_SITE)
 set(CTEST_BUILD_NAME "$ENV{BUILD_NAME}")
@@ -11,30 +13,18 @@ set(CTEST_COVERAGE_COMMAND "$ENV{CTEST_COVERAGE_COMMAND}")
 set(CTEST_MEMORYCHECK_COMMAND "$ENV{CTEST_MEMORYCHECK_COMMAND}")
 set(CTEST_MEMORYCHECK_TYPE "$ENV{CTEST_MEMORYCHECK_TYPE}")
 
-include(ProcessorCount)
-ProcessorCount(nproc)
-if(NOT nproc EQUAL 0)
-  set(test_args PARALLEL_LEVEL ${nproc})
-endif()
-
-ctest_start("Experimental")
-
-if(EXISTS "/toolchain.cmake")
-  ctest_configure(OPTIONS "-DCMAKE_TOOLCHAIN_FILE:FILEPATH=/toolchain.cmake")
-else()
-  ctest_configure()
-endif()
-
+ctest_start("@BUILD_MODEL@")
+ctest_configure(@CONFIGURE_ARGS@)
 ctest_build()
 
-ctest_test(${test_args})
+ctest_test(@TEST_ARGS@)
 
 if(CTEST_COVERAGE_COMMAND)
   ctest_coverage()
 endif()
 
 if(CTEST_MEMORYCHECK_COMMAND OR CTEST_MEMORYCHECK_TYPE)
-  ctest_memcheck(${test_args})
+  ctest_memcheck(@TEST_ARGS@)
 endif()
 
 ctest_submit()

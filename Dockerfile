@@ -39,6 +39,7 @@ RUN buildDeps='g++ git' \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./build.cmake /
+COPY ./entrypoint.cmake /
 COPY ./entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]

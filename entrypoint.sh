@@ -10,8 +10,8 @@ if [[ -n $BUILDER_UID ]] && [[ -n $BUILDER_GID ]]; then
     chown -R $BUILDER_UID:$BUILDER_GID /binary
 
     # Run the command as the specified user/group.
-    exec chpst -u :$BUILDER_UID:$BUILDER_GID ctest -S build.cmake "$@"
+    exec chpst -u :$BUILDER_UID:$BUILDER_GID ctest -S entrypoint.cmake "$@"
 else
     # Just run the command as root.
-    exec ctest -S build.cmake "$@"
+    exec ctest -S entrypoint.cmake "$@"
 fi

@@ -1,17 +1,67 @@
 #!/bin/sh
 
-if (( $# < 1 )); then
-  echo "Insufficient parameters are insufficient." >&2
+if ! options=$(getopt -o c: -l clean,config:,test,package -- "$@")
+then
   exit 1
 fi
 
-mkdir -p build/$1
-docker run --rm -h $(hostname) \
-  -v $(pwd):/source:ro \
-  -v $(pwd)/build/$1:/binary:rw \
-  -e BUILD_NAME=$1 \
-  -e BUILDER_UID=$(id -u) \
-  -e BUILDER_GID=$(id -g) \
-  -e BUILDER_USER=$(id -un) \
-  -e BUILDER_GROUP=$(id -gn) \
-  purplekarrot/"$@"
+eval set -- $options
+
+clean=0
+config=()
+testing=0
+package=0
+verbose=0
+while [ $# -gt 0 ]
+do
+  case $1 in
+    --clean)
+      clean=1
+      ;;
+    -c|--config)
+      config+=($2)
+      shift
+      ;;
+    --test)
+      testing=1
+      ;;
+    --package)
+      package=1
+      ;;
+    (--)
+      shift
+      break
+      ;;
+    (-*)
+      echo "$0: error - unrecognized option $1" 1>&2
+      exit 1
+      ;;
+    (*)
+      break
+      ;;
+  esac
+  shift
+done
+
+IFS=";"
+args=()
+args+=("-DCLEAN_BUILD=$clean")
+args+=("-DBUILD_CONFIGURATIONS=${config[*]}")
+args+=("-DRUN_TESTS=$testing")
+args+=("-DBUILD_PACKAGES=$package")
+args+=("-V")
+
+while [ $# -gt 0 ]
+do
+  mkdir -p build/$1
+  docker run --rm -h $(hostname) \
+    -v $(pwd):/source:ro \
+    -v $(pwd)/build/$1:/binary:rw \
+    -e BUILD_NAME=$1 \
+    -e BUILDER_UID=$(id -u) \
+    -e BUILDER_GID=$(id -g) \
+    -e BUILDER_USER=$(id -un) \
+    -e BUILDER_GROUP=$(id -gn) \
+    purplekarrot/$1 "${args[@]}"
+  shift
+done

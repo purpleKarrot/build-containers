@@ -12,7 +12,7 @@ if(NOT nproc EQUAL 0)
   set(TEST_ARGS "PARALLEL_LEVEL ${nproc}")
 endif()
 
-foreach(config Debug Release)
+foreach(config ${BUILD_CONFIGURATIONS})
   set(BUILD_CONFIG "${config}")
   set(CONFIGURE_ARGS "OPTIONS \"-DCMAKE_BUILD_TYPE:STRING=${config}${toolchain_arg}\"")
   configure_file("/build.cmake" "/binary/build-${config}.cmake" @ONLY)

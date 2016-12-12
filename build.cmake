@@ -1,7 +1,9 @@
 set(CTEST_SOURCE_DIRECTORY "/source")
 set(CTEST_BINARY_DIRECTORY "/binary/@BUILD_CONFIG@")
 
-ctest_empty_binary_directory(${CTEST_BINARY_DIRECTORY})
+if(CLEAN_BUILD)
+  ctest_empty_binary_directory(${CTEST_BINARY_DIRECTORY})
+endif()
 
 site_name(CTEST_SITE)
 set(CTEST_BUILD_NAME "$ENV{BUILD_NAME}")
@@ -17,14 +19,14 @@ ctest_start("@BUILD_MODEL@")
 ctest_configure(@CONFIGURE_ARGS@)
 ctest_build()
 
-ctest_test(@TEST_ARGS@)
-
-if(CTEST_COVERAGE_COMMAND)
-  ctest_coverage()
-endif()
-
-if(CTEST_MEMORYCHECK_COMMAND OR CTEST_MEMORYCHECK_TYPE)
-  ctest_memcheck(@TEST_ARGS@)
+if(RUN_TESTS)
+  ctest_test(@TEST_ARGS@)
+  if(CTEST_COVERAGE_COMMAND)
+    ctest_coverage()
+  endif()
+  if(CTEST_MEMORYCHECK_COMMAND OR CTEST_MEMORYCHECK_TYPE)
+    ctest_memcheck(@TEST_ARGS@)
+  endif()
 endif()
 
 ctest_submit()

@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends g++-5 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CTEST_COVERAGE_COMMAND="/usr/bin/gcov-5"
-
-COPY ./toolchain.cmake /
+ENV CC="/usr/bin/gcc-5" \
+    CXX="/usr/bin/g++-5" \
+    COVERAGE_COMMAND="/usr/bin/gcov-5" \
+    COVERAGE_FLAGS="--coverage"

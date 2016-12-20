@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends g++-6 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CTEST_COVERAGE_COMMAND="/usr/bin/gcov-6"
-
-COPY ./toolchain.cmake /
+ENV CC="/usr/bin/gcc-6" \
+    CXX="/usr/bin/g++-6" \
+    COVERAGE_COMMAND="/usr/bin/gcov-6" \
+    COVERAGE_FLAGS="--coverage"

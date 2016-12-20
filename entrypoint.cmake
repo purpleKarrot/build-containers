@@ -12,6 +12,10 @@ if(NOT nproc EQUAL 0)
   set(TEST_ARGS "PARALLEL_LEVEL ${nproc}")
 endif()
 
+if(NOT BUILD_CONFIGURATIONS)
+  message(FATAL_ERROR "Nothing to build!")
+endif()
+
 foreach(config ${BUILD_CONFIGURATIONS})
   set(BUILD_CONFIG "${config}")
   set(CONFIGURE_ARGS "OPTIONS \"-DCMAKE_BUILD_TYPE:STRING=${config}${toolchain_arg}\"")
@@ -20,8 +24,9 @@ foreach(config ${BUILD_CONFIGURATIONS})
   list(APPEND _install_projects "/binary/${config};\${CPACK_PACKAGE_NAME};ALL;/")
 endforeach()
 
+list(GET BUILD_CONFIGURATIONS 0 _first_config)
 file(WRITE "/binary/CPackConfig.cmake"
-  "include(\"/binary/Release/CPackConfig.cmake\")\n"
+  "include(\"/binary/${_first_config}/CPackConfig.cmake\")\n"
   "set(CPACK_INSTALL_CMAKE_PROJECTS \"${_install_projects}\")\n"
   )
 

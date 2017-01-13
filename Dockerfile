@@ -8,6 +8,13 @@ RUN apt-get update \
         runit \
     && rm -rf /var/lib/apt/lists/*
 
+# Disable git warning about detached HEAD.
+RUN buildDeps='git' \
+    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && git config --global advice.detachedHead false \
+    && apt-get purge --auto-remove -y $buildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
 # Build and install ninja from source.
 RUN buildDeps='g++ git python' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \

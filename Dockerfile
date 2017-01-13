@@ -30,7 +30,7 @@ RUN buildDeps='g++ git python' \
 # Build and install CMake from source.
 RUN buildDeps='g++ git' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-    && git clone --progress -b v3.7.1 --depth 1 git://cmake.org/cmake.git CMake \
+    && git clone --progress -b v3.7.2 --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
     && cd build \

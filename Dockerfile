@@ -18,7 +18,7 @@ RUN buildDeps='git' \
 # Build and install ninja from source.
 RUN buildDeps='g++ git python' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-    && git clone --progress -b v1.7.2 --depth 1 https://github.com/martine/ninja.git \
+    && git clone -b v1.7.2 --depth 1 https://github.com/martine/ninja.git \
     && cd ninja \
     && python configure.py --bootstrap \
     && mv ninja /usr/bin/ \
@@ -30,7 +30,7 @@ RUN buildDeps='g++ git python' \
 # Build and install CMake from source.
 RUN buildDeps='g++ git' \
     && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
-    && git clone --progress -b v3.7.2 --depth 1 git://cmake.org/cmake.git CMake \
+    && git clone -b v3.7.2 --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
     && cd build \

@@ -58,10 +58,12 @@ do
     -v $(pwd):/source:ro \
     -v $(pwd)/build/$1:/binary:rw \
     -e BUILD_NAME=$1 \
+    -e BUILD_MODEL='Experimental' \
     -e BUILDER_UID=$(id -u) \
     -e BUILDER_GID=$(id -g) \
     -e BUILDER_USER=$(id -un) \
     -e BUILDER_GROUP=$(id -gn) \
+    -e CHANGE_ID=$(git rev-parse --verify HEAD) \
     purplekarrot/$1 "${args[@]}"
   shift
 done

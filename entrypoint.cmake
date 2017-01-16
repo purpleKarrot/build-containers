@@ -17,9 +17,12 @@ if(NOT BUILD_CONFIGURATIONS)
   message(FATAL_ERROR "Nothing to build!")
 endif()
 
+set(prefix_arg ";-DCMAKE_INSTALL_PREFIX:PATH=/prefix")
+
 foreach(config ${BUILD_CONFIGURATIONS})
   set(BUILD_CONFIG "${config}")
-  set(CONFIGURE_ARGS "OPTIONS \"-DCMAKE_BUILD_TYPE:STRING=${config}${toolchain_arg}\"")
+  set(config_arg "-DCMAKE_BUILD_TYPE:STRING=${config}")
+  set(CONFIGURE_ARGS "OPTIONS \"${config_arg}${prefix_arg}${toolchain_arg}\"")
   configure_file("/build.cmake" "/binary/build-${config}.cmake" @ONLY)
   list(APPEND _run_scripts "/binary/build-${config}.cmake")
   list(APPEND _install_projects "/binary/${config};\${CPACK_PACKAGE_NAME};ALL;/")

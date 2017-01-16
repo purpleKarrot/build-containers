@@ -31,8 +31,15 @@ file(WRITE "/binary/CPackConfig.cmake"
   "set(CPACK_INSTALL_CMAKE_PROJECTS \"${_install_projects}\")\n"
   )
 
-ctest_run_script(${_run_scripts})
+ctest_run_script(${_run_scripts} RETURN_VALUE ret)
+if(NOT ret EQUAL 0)
+  message(FATAL_ERROR "Failed to run build script.")
+endif()
 
 execute_process(COMMAND cpack --config ./CPackConfig.cmake
   WORKING_DIRECTORY "/binary"
+  RESULT_VARIABLE ret
   )
+if(NOT ret EQUAL 0)
+  message(FATAL_ERROR "Failed to create package.")
+endif()

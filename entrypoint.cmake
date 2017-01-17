@@ -28,21 +28,22 @@ foreach(config ${BUILD_CONFIGURATIONS})
   list(APPEND _install_projects "/binary/${config};\${CPACK_PACKAGE_NAME};ALL;/")
 endforeach()
 
-list(GET BUILD_CONFIGURATIONS 0 _first_config)
-file(WRITE "/binary/CPackConfig.cmake"
-  "include(\"/binary/${_first_config}/CPackConfig.cmake\")\n"
-  "set(CPACK_INSTALL_CMAKE_PROJECTS \"${_install_projects}\")\n"
-  )
-
 ctest_run_script(${_run_scripts} RETURN_VALUE ret)
 if(NOT ret EQUAL 0)
   message(FATAL_ERROR "Failed to run build script.")
 endif()
 
-execute_process(COMMAND cpack --config ./CPackConfig.cmake
-  WORKING_DIRECTORY "/binary"
-  RESULT_VARIABLE ret
-  )
-if(NOT ret EQUAL 0)
-  message(FATAL_ERROR "Failed to create package.")
+if(BUILD_PACKAGES)
+  list(GET BUILD_CONFIGURATIONS 0 _first_config)
+  file(WRITE "/binary/CPackConfig.cmake"
+    "include(\"/binary/${_first_config}/CPackConfig.cmake\")\n"
+    "set(CPACK_INSTALL_CMAKE_PROJECTS \"${_install_projects}\")\n"
+    )
+  execute_process(COMMAND cpack --config ./CPackConfig.cmake
+    WORKING_DIRECTORY "/binary"
+    RESULT_VARIABLE ret
+    )
+  if(NOT ret EQUAL 0)
+    message(FATAL_ERROR "Failed to create package.")
+  endif()
 endif()

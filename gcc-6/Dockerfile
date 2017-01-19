@@ -1,7 +1,7 @@
 FROM purplekarrot/base
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends g++-6 \
+RUN apt-get -qq update \
+    && apt-get -qq install -y --no-install-recommends g++-6 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CC="/usr/bin/gcc-6" \

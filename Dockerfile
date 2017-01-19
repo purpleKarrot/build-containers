@@ -2,7 +2,7 @@ FROM debian:stretch
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && apt-get -qq install -y --no-install-recommends \
         ca-certificates \
         make \
         runit \
@@ -10,26 +10,29 @@ RUN apt-get update \
 
 # Disable git warning about detached HEAD.
 RUN buildDeps='git' \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get -qq update \
+    && apt-get -qq install -y $buildDeps --no-install-recommends \
     && git config --global advice.detachedHead false \
-    && apt-get purge --auto-remove -y $buildDeps \
+    && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
 # Build and install ninja from source.
 RUN buildDeps='g++ git python' \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get -qq update \
+    && apt-get -qq install -y $buildDeps --no-install-recommends \
     && git clone -b v1.7.2 --depth 1 https://github.com/martine/ninja.git \
     && cd ninja \
     && python configure.py --bootstrap \
     && mv ninja /usr/bin/ \
     && cd / \
     && rm -rf ninja \
-    && apt-get purge --auto-remove -y $buildDeps \
+    && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
 # Build and install CMake from source.
 RUN buildDeps='g++ git' \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get -qq update \
+    && apt-get -qq install -y $buildDeps --no-install-recommends \
     && git clone -b v3.7.2 --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
@@ -42,7 +45,7 @@ RUN buildDeps='g++ git' \
     && make install \
     && cd / \
     && rm -rf CMake \
-    && apt-get purge --auto-remove -y $buildDeps \
+    && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./build.cmake /

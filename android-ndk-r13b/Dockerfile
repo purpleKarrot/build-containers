@@ -1,12 +1,13 @@
 FROM purplekarrot/base
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends qemu-user \
+RUN true \
+    && apt-get -qq update \
+    && apt-get -qq install -y --no-install-recommends qemu-user \
     && rm -rf /var/lib/apt/lists/*
 
-RUN buildDeps='curl file python unzip' \
-    revision='13b' \
-    && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
+RUN buildDeps='curl file python unzip' revision='13b' \
+    && apt-get -qq update \
+    && apt-get -qq install -y --no-install-recommends $buildDeps \
     && mkdir /tmp/android-ndk \
     && cd /tmp/android-ndk \
     && curl -SLO http://dl.google.com/android/repository/android-ndk-r${revision}-linux-x86_64.zip \
@@ -17,7 +18,7 @@ RUN buildDeps='curl file python unzip' \
         --install-dir=/opt/android-ndk \
     && cd / \
     && rm -rf /tmp/android-ndk \
-    && apt-get purge --auto-remove -y $buildDeps \
+    && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
 COPY toolchain.cmake .

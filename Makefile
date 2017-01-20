@@ -13,7 +13,9 @@ IMAGES = \
 	gcc-5 \
 	gcc-6 \
 	mingw-w64-i686 \
-	mingw-w64-x86-64
+	mingw-w64-x86-64 \
+	wine32-gcc \
+	wine64-gcc
 
 all: $(IMAGES)
 

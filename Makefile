@@ -11,7 +11,9 @@ IMAGES = \
 	clang-3.8 \
 	clang-3.9 \
 	gcc-5 \
-	gcc-6
+	gcc-6 \
+	mingw-w64-i686 \
+	mingw-w64-x86-64
 
 all: $(IMAGES)
 

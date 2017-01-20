@@ -1,6 +1,9 @@
 FROM debian:stretch
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
+ENV HOME="/home/builder"
+RUN mkdir -p $HOME
+
 RUN apt-get update \
     && apt-get -qq install -y --no-install-recommends \
         ca-certificates \

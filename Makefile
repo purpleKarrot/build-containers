@@ -16,6 +16,8 @@ IMAGES = \
 	gcc-6 \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \
+	msvc-9.0 \
+	oracle \
 	wine32-gcc \
 	wine64-gcc
 

@@ -14,6 +14,7 @@ RUN VERSION=3.8 \
     && rm -rf /tmp/clang-tidy \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CTEST_MEMORYCHECK_TYPE="AddressSanitizer"
+ENV CC="/usr/bin/clang-3.8" \
+    CXX="/usr/bin/clang++-3.8"
 
 COPY ./toolchain.cmake /

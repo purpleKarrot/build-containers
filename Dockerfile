@@ -4,7 +4,8 @@ MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 ENV HOME="/home/builder"
 RUN mkdir -p $HOME
 
-RUN apt-get update \
+RUN true \
+    && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
         ca-certificates \
         make \

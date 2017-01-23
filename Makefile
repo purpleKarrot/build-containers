@@ -9,7 +9,9 @@ IMAGES = \
 	android-ndk-r13b \
 	arm-linux-gnueabihf \
 	clang-3.8 \
+	clang-3.8-clazy \
 	clang-3.9 \
+	clang-3.9-clazy \
 	gcc-5 \
 	gcc-6 \
 	mingw-w64-i686 \
@@ -21,6 +23,9 @@ all: $(IMAGES)
 
 base:
 	$(DOCKER) build -t $(ORG)/base .
+
+clang-3.8-clazy: clang-3.8
+clang-3.9-clazy: clang-3.9
 
 $(IMAGES): base
 	$(DOCKER) build -t $(ORG)/$@ $@

@@ -1,7 +1,7 @@
 set(CTEST_RUN_CURRENT_SCRIPT 0)
 
-set(BUILD_MODEL "${BUILD_MODEL}")
-set(CTEST_CHANGE_ID "${CHANGE_ID}")
+set(BUILD_MODEL "$ENV{BUILD_MODEL}")
+set(CTEST_CHANGE_ID "$ENV{CHANGE_ID}")
 
 if(EXISTS "/toolchain.cmake")
   set(toolchain_arg ";-DCMAKE_TOOLCHAIN_FILE:FILEPATH=/toolchain.cmake")

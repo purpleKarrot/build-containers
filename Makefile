@@ -34,6 +34,9 @@ $(IMAGES): base
 display_images:
 	for image in $(IMAGES); do echo $$image; done
 
+push:
+	for image in $(IMAGES); do docker push $(ORG)/$$image; done
+
 prefix=/usr/local
 
 install:

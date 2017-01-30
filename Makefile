@@ -37,6 +37,9 @@ display_images:
 push:
 	for image in $(IMAGES); do docker push $(ORG)/$$image; done
 
+pull:
+	for image in $(IMAGES); do docker pull $(ORG)/$$image; done
+
 prefix=/usr/local
 
 install:

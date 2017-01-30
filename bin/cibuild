@@ -49,7 +49,7 @@ args+=("-DCLEAN_BUILD=$clean")
 args+=("-DBUILD_CONFIGURATIONS=${config[*]}")
 args+=("-DRUN_TESTS=$testing")
 args+=("-DBUILD_PACKAGES=$package")
-args+=("-V")
+args+=("-VV")
 
 while [ $# -gt 0 ]
 do

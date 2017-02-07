@@ -27,7 +27,7 @@ RUN buildDeps='g++ git python' \
     && git clone -b v1.7.2 --depth 1 https://github.com/martine/ninja.git \
     && cd ninja \
     && python configure.py --bootstrap \
-    && mv ninja /usr/bin/ \
+    && mv ninja /usr/local/bin/ \
     && cd / \
     && rm -rf ninja \
     && apt-get -qq purge --auto-remove -y $buildDeps \
@@ -37,13 +37,13 @@ RUN buildDeps='g++ git python' \
 RUN buildDeps='g++ git' \
     && apt-get -qq update \
     && apt-get -qq install -y $buildDeps --no-install-recommends \
-    && git clone -b master --depth 1 git://cmake.org/cmake.git CMake \
+    && git clone -b release --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
     && cd build \
     && ../bootstrap \
         --parallel=$(nproc) \
-        --prefix=/usr \
+        --prefix=/usr/local \
         --no-server \
     && make -j$(nproc) \
     && make install \

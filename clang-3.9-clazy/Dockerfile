@@ -8,7 +8,7 @@ RUN buildDeps='git libclang-3.9-dev llvm-3.9-dev zlib1g-dev' \
     && mkdir clazy/build \
     && cd clazy/build \
     && cmake -GNinja .. \
-        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DLLVM_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/llvm-config-3.9 \
@@ -20,4 +20,4 @@ RUN buildDeps='git libclang-3.9-dev llvm-3.9-dev zlib1g-dev' \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CLANGXX=$CXX \
-    CXX="/usr/local/bin/clazy"
+    CXX="/usr/bin/clazy"

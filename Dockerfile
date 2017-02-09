@@ -8,8 +8,15 @@ RUN true \
     && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
         ca-certificates \
+        libarchive13 \
+        libcurl3 \
+        libexpat1 \
+        libjsoncpp1 \
+        librhash0 \
+        libuv1 \
         make \
         runit \
+        zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 # Disable git warning about detached HEAD.
@@ -34,7 +41,17 @@ RUN buildDeps='g++ git python' \
     && rm -rf /var/lib/apt/lists/*
 
 # Build and install CMake from source.
-RUN buildDeps='g++ git' \
+RUN buildDeps=' \
+        g++ \
+        git \
+        libarchive-dev \
+        libcurl4-openssl-dev \
+        libexpat1-dev \
+        libjsoncpp-dev \
+        librhash-dev \
+        libuv1-dev \
+        zlib1g-dev \
+        ' \
     && apt-get -qq update \
     && apt-get -qq install -y $buildDeps --no-install-recommends \
     && git clone -b v3.8.0-rc1 --depth 1 git://cmake.org/cmake.git CMake \
@@ -44,6 +61,7 @@ RUN buildDeps='g++ git' \
     && ../bootstrap \
         --parallel=$(nproc) \
         --prefix=/usr/local \
+        --system-libs \
         --no-server \
     && make -j$(nproc) \
     && make install \

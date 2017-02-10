@@ -23,7 +23,7 @@ IMAGES = \
 all: $(IMAGES)
 
 base:
-	$(DOCKER) build -t $(ORG)/base .
+	$(DOCKER) build -t $(ORG)/base base
 
 clang-3.8-clazy: clang-3.8
 clang-3.9-clazy: clang-3.9
@@ -35,14 +35,16 @@ display_images:
 	for image in $(IMAGES); do echo $$image; done
 
 push:
+	docker push $(ORG)/base
 	for image in $(IMAGES); do docker push $(ORG)/$$image; done
 
 pull:
+	docker pull $(ORG)/base
 	for image in $(IMAGES); do docker pull $(ORG)/$$image; done
 
 prefix=/usr/local
 
 install:
-	install -m 0755 bin/cibuild $(prefix)/bin
+	install -m 0755 cibuild $(prefix)/bin
 
 .PHONY: base $(IMAGES)

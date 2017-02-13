@@ -4,7 +4,7 @@ FROM purplekarrot/clang-3.8
 RUN buildDeps='git libclang-3.8-dev llvm-3.8-dev zlib1g-dev' \
     && apt-get -qq update \
     && apt-get -qq install -y $buildDeps --no-install-recommends \
-    && git clone --depth 1 https://github.com/KDE/clazy.git \
+    && git clone -b 1.1 --depth 1 https://github.com/KDE/clazy.git \
     && mkdir clazy/build \
     && cd clazy/build \
     && cmake -GNinja .. \

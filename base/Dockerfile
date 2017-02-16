@@ -70,8 +70,6 @@ RUN buildDeps=' \
     && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./build.cmake /
-COPY ./entrypoint.cmake /
-COPY ./entrypoint.sh /
+COPY . /
 
 ENTRYPOINT ["/entrypoint.sh"]

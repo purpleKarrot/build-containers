@@ -11,6 +11,7 @@ RUN dpkg --add-architecture i386 \
     && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
         nsis \
+        winbind \
         wine-development \
         wine32-development \
     && rm -rf /var/lib/apt/lists/*
@@ -53,5 +54,6 @@ RUN buildDeps='wine32-development-tools' \
 COPY ./toolchain.cmake /
 
 RUN true \
+    && echo "winbindd" >> /systemsetup.sh \
     && echo "wineserver --persistent" >> /usersetup.sh \
     && echo "wine mspdbsrv.exe -start -shutdowntime -1 >/dev/null 2>&1 &" >> /usersetup.sh

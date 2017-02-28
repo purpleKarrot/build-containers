@@ -12,7 +12,6 @@ IMAGES = \
 	clang-3.8-clazy \
 	clang-3.9 \
 	clang-3.9-clazy \
-	gcc-5 \
 	gcc-6 \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \

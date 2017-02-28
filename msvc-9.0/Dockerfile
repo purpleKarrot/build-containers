@@ -1,6 +1,6 @@
 FROM purplekarrot/base
 
-ENV WINEARCH="win32"
+ENV WINEARCH="win32" WINEDEBUG=-all
 ENV VSINSTALLDIR="C:\Program Files\Common Files\Microsoft\Visual C++ for Python\9.0"
 ENV CL_CMD="$VSINSTALLDIR\VC\bin\cl.exe" \
     LINK_CMD="$VSINSTALLDIR\VC\bin\link.exe" \

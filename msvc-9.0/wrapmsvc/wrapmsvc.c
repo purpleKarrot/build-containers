@@ -24,11 +24,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <inttypes.h>
-
 #include <unistd.h>
-
-#include "debug.h"
-#include "Reactor.h"
 
 #define MAX_CMDLINE_LEN 65536
 #define MT_MAGIC 1090650113
@@ -92,7 +88,7 @@ void print_a (char *str, int len)
     if (len < 0) {
         len = strlen(str);
     }
-    
+
     write(2, str, len);
 }
 
@@ -101,61 +97,35 @@ void print_w (WCHAR *w, int len)
     if (len < 0) {
         len = wcslen(w);
     }
-    
+
     if (len == 0) {
         return;
     }
-    
+
     int alen = WideCharToMultiByte(CP_UNIXCP, 0, w, len, NULL, 0, NULL, NULL);
     if (alen == 0) {
         fail("WideCharToMultiByte failed");
     }
-    
+
     char *a = HeapAlloc(GetProcessHeap(), 0, alen * sizeof(char));
     if (!a) {
         fail("HeapAlloc failed");
     }
-    
+
     WideCharToMultiByte(CP_UNIXCP, 0, w, len, a, alen, NULL, NULL);
-    
+
     write(2, a, alen);
-    
+
     HeapFree(GetProcessHeap(), 0, a);
 }
 
-Reactor r;
-int return_value;
-
-PROCESS_INFORMATION pi;
-
-// Handler called by the reactor when the process terminates
-void process_handler (void *unused)
-{
-    DWORD exit_code;
-    if (!GetExitCodeProcess(pi.hProcess, &exit_code)) {
-        fail("GetExitCodeProcess failed");
-    }
-    
-    #if defined(WRAP_MT)
-    if (exit_code == MT_MAGIC) {
-        exit_code = MT_MAGIC_CONV;
-    }
-    #endif
-    
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-    
-    return_value = exit_code;
-    Reactor_Quit(&r);
-}
-    
 int main (int argc, char **argv)
 {
     char *cl_cmd = getenv(CMD_ENVVAR);
     if (!cl_cmd) {
         fail(CMD_ENVVAR" not set");
     }
-    
+
     #ifndef WINTEST
     LPWSTR (*CDECL wine_get_dos_file_name_ptr)(LPCSTR);
     wine_get_dos_file_name_ptr = (void *)GetProcAddress(GetModuleHandleA("KERNEL32"), "wine_get_dos_file_name");
@@ -163,41 +133,41 @@ int main (int argc, char **argv)
         fail("cannot get wine_get_dos_file_name");
     }
     #endif
-    
+
     WCHAR cmdline[CMDLINE_BUF_LEN];
     int cmdline_len = 0;
-    
+
     void append_char (WCHAR c)
     {
         if (1 > MAX_CMDLINE_LEN - cmdline_len) {
             fail("out of command line buffer");
         }
-        
+
         cmdline[cmdline_len] = c;
         cmdline_len++;
     }
-    
+
     int arg_writing = 0;
-    
+
     void start_argument ()
     {
-        ASSERT(!arg_writing)
-        
+        assert(!arg_writing);
+
         if (cmdline_len == 0) {
             append_char('"');
         } else {
             append_char(' ');
             append_char('"');
         }
-        
+
         arg_writing = 1;
     }
-    
+
     void write_argument_w (WCHAR *data, int len)
     {
-        ASSERT(arg_writing)
-        ASSERT(len >= 0)
-        
+        assert(arg_writing);
+        assert(len >= 0);
+
         int i;
         for (i = 0; i < len; i++) {
             if (data[i] == '"') {
@@ -212,55 +182,55 @@ int main (int argc, char **argv)
             }
         }
     }
-    
+
     void end_argument ()
     {
-        ASSERT(arg_writing)
-        
+        assert(arg_writing);
+
         int j;
         for (j = cmdline_len - 1; cmdline[j] == '\\'; j--) {
             append_char('\\');
         }
         append_char('"');
-        
+
         arg_writing = 0;
     }
-    
+
     void write_argument_a (char *data, int len)
     {
-        ASSERT(arg_writing)
-        ASSERT(len >= 0)
-        
+        assert(arg_writing);
+        assert(len >= 0);
+
         if (len == 0) {
             return;
         }
-        
+
         int wc_len = MultiByteToWideChar(WCHAR_CONVERT_CP, 0, data, len, NULL, 0);
         if (wc_len == 0) {
             fail("MultiByteToWideChar failed");
         }
-        
+
         WCHAR *wc = HeapAlloc(GetProcessHeap(), 0, wc_len * sizeof(WCHAR));
         if (!wc) {
             fail("HeapAlloc failed");
         }
-        
+
         MultiByteToWideChar(WCHAR_CONVERT_CP, 0, data, len, wc, wc_len);
-        
+
         write_argument_w(wc, wc_len);
-        
+
         HeapFree(GetProcessHeap(), 0, wc);
     }
-    
+
     void write_argument_path (char *path, int len)
     {
-        ASSERT(arg_writing)
-        ASSERT(len >= 0)
-        
+        assert(arg_writing);
+        assert(len >= 0);
+
         if (len == 0) {
             return;
         }
-        
+
         // cmake is broken and may give gives unix style paths with backshashes
         char *fixed = HeapAlloc(GetProcessHeap(), 0, len + 1);
         if (!fixed) {
@@ -275,36 +245,36 @@ int main (int argc, char **argv)
             }
         }
         fixed[i] = '\0';
-        
+
         // convert to windows path
         WCHAR *conv_path = wine_get_dos_file_name_ptr(fixed);
         if (!conv_path) {
             fail("cannot convert path");
         }
-        
+
         write_argument_w(conv_path, wcslen(conv_path));
-        
+
         HeapFree(GetProcessHeap(), 0, fixed);
         HeapFree(GetProcessHeap(), 0, conv_path);
     }
-    
+
     // Appends an argument to the command line. Parameters:
     // str - zero terminated input argument to be appended
     // prefix - all characters of the input argument after
     //          that many bytes will be treated as a path
     void add_arg (char *str, int prefix_len)
     {
-        ASSERT(prefix_len >= 0);
-        ASSERT(prefix_len <= strlen(str));
-        
+        assert(prefix_len >= 0);;
+        assert(prefix_len <= strlen(str));;
+
         int path_len = strlen(str + prefix_len);
-        
+
         start_argument();
         write_argument_a(str, prefix_len);
         write_argument_path(str + prefix_len, path_len);
         end_argument();
     }
-    
+
     // parse CL_CMD
     char *ch = cl_cmd;
     char *current_arg = ch;
@@ -317,22 +287,22 @@ int main (int argc, char **argv)
         ch++;
     }
     add_arg(current_arg, strlen(current_arg));
-    
+
     // Parse arguments.
     // Some of this is guessing, because an argument starting with /
     // could always be a file rather than an option.
     // Handle this so that when given an argument beginning with /,
     // and such a file exits on the system, interpret it as a path.
-    
+
     int i = 1;
-    
+
     #if defined(WRAP_CL)
     while (i < argc) {
         // take argument
         char *arg = argv[i];
         int len = strlen(arg);
         i++;
-        
+
         // parse as option?
         if (
             len >= 2 && (
@@ -341,7 +311,7 @@ int main (int argc, char **argv)
             )
         ) {
             int optlen;
-            
+
             // arguments with paths
             if (len >= 3 && arg[1] == 'F') {
                 // path optional
@@ -413,7 +383,7 @@ int main (int argc, char **argv)
                 }
                 continue;
             }
-            
+
             // all arguments beginning with this are passed literally
             if (
                 arg[1] == 'O' || arg[1] == 'G' || arg[1] == 'E' || arg[1] == 'Q' ||
@@ -423,25 +393,25 @@ int main (int argc, char **argv)
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // /fp:..
             if (len >= 4 && !memcmp(arg + 1, "fp:", 3)) {
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // /RTC...
             if (len >= 4 && !memcmp(arg + 1, "RTC", 3)) {
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // /clr[:option]
             if (len >= 4 && !memcmp(arg + 1, "clr", 3)) {
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // /F<num> set stack size
             if (arg[1] == 'F' && len > 2) {
                 char *endptr;
@@ -451,7 +421,7 @@ int main (int argc, char **argv)
                     continue;
                 }
             }
-            
+
             // flags with no arguments
             if (
                 !strcmp(arg + 1, "showIncludes") ||
@@ -475,37 +445,37 @@ int main (int argc, char **argv)
                 add_arg(arg, len);
                 continue;
             }
-            
+
             if (!strcmp(arg + 1, "link")) {
                 add_arg(arg, len);
                 // linker options follow
                 break;
             }
-            
+
             // assume it's a file
             add_arg(arg, 0);
             continue;
         }
-        
+
         // @<file>
         if (len >= 1 && arg[0] == '@') {
             add_arg(arg, 1);
             continue;
         }
-        
+
         // assume it's a file
         add_arg(arg, 0);
         continue;
     }
     #endif
-    
+
     #if defined(WRAP_LINK) || defined(WRAP_CL)
     while (i < argc) {
         // take argument
         char *arg = argv[i];
         int len = strlen(arg);
         i++;
-        
+
         // parse as option?
         if (
             len >= 2 && (
@@ -517,7 +487,7 @@ int main (int argc, char **argv)
             )
         ) {
             int optlen;
-            
+
             // options without arguments
             if (
                 !strcasecmp(arg + 1, "DEBUG") ||
@@ -538,7 +508,7 @@ int main (int argc, char **argv)
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // options with literal arguments
             if (
                 begins_with_ci(arg + 1, "ALIGN:", &optlen) ||
@@ -599,7 +569,7 @@ int main (int argc, char **argv)
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // options with path arguments
             if (
                 begins_with_ci(arg + 1, "LIBPATH:", &optlen) ||
@@ -617,33 +587,33 @@ int main (int argc, char **argv)
                 continue;
             }
         }
-        
+
         // @response_file
         if (len >= 1 && arg[0] == '@') {
             add_arg(arg, 1);
             continue;
         }
-        
+
         // TODO: check semantics of this
         // if a file of that name exists, assume it's a path
         if (len > 0 && access(arg, F_OK) == 0) {
             add_arg(arg, 0);
             continue;
         }
-        
+
         // do not change
         add_arg(arg, len);
         continue;
     }
     #endif
-    
+
     #if defined(WRAP_RC)
     while (i < argc) {
         // take argument
         char *arg = argv[i];
         int len = strlen(arg);
         i++;
-        
+
         // parse as option?
         if (
             len >= 2 && (
@@ -655,7 +625,7 @@ int main (int argc, char **argv)
             int j = 1;
             while (j < len) {
                 int optlen;
-                
+
                 // multi-letter options with no arguments
                 if (
                     j == 1 && (
@@ -666,7 +636,7 @@ int main (int argc, char **argv)
                     add_arg(arg, len);
                     goto next_arg;
                 }
-                
+
                 // multi-letter options with path arguments
                 if (
                     j == 1 && (
@@ -682,7 +652,7 @@ int main (int argc, char **argv)
                     }
                     goto next_arg;
                 }
-                
+
                 // single-letter options with no arguments
                 if (
                     begins_with_ci(arg + j, "?", &optlen) ||
@@ -697,7 +667,7 @@ int main (int argc, char **argv)
                     j += optlen;
                     continue;
                 }
-                
+
                 // single-letter options with literal arguments
                 if (
                     begins_with_ci(arg + j, "c", &optlen) ||
@@ -716,7 +686,7 @@ int main (int argc, char **argv)
                     }
                     goto next_arg;
                 }
-                
+
                 // single-letter with path arguments
                 if (
                     begins_with_ci(arg + j, "I", &optlen) ||
@@ -730,33 +700,33 @@ int main (int argc, char **argv)
                     }
                     goto next_arg;
                 }
-                
+
                 // unknown option, assume it's a path
                 goto assume_path;
             }
-            
+
             // options without arguments, add literally
             add_arg(arg, len);
             continue;
         }
-        
+
         // assume its is a path
-        
+
 assume_path:
         add_arg(arg, 0);
         continue;
-        
+
 next_arg:;
     }
     #endif
-    
+
     #if defined(WRAP_MT)
     while (i < argc) {
         // take argument
         char *arg = argv[i];
         int len = strlen(arg);
         i++;
-        
+
         // parse as option?
         if (
             len >= 2 && (
@@ -765,7 +735,7 @@ next_arg:;
             )
         ) {
             int optlen;
-            
+
             // options with no value
             if (
                 !strcasecmp(arg + 1, "manifest") ||
@@ -781,7 +751,7 @@ next_arg:;
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // options with literal value
             if (
                 begins_with_ci(arg + 1, "identity:", &optlen) ||
@@ -790,7 +760,7 @@ next_arg:;
                 add_arg(arg, len);
                 continue;
             }
-            
+
             // options with path value
             if (
                 begins_with_ci(arg + 1, "rgs:", &optlen) ||
@@ -804,7 +774,7 @@ next_arg:;
                 add_arg(arg, 1 + optlen);
                 continue;
             }
-            
+
             // options with path value and optional resource ID
             if (
                 begins_with_ci(arg + 1, "inputresource:", &optlen) ||
@@ -829,20 +799,22 @@ next_arg:;
                 continue;
             }
         }
-        
+
         // assume its is a path
         add_arg(arg, 0);
         continue;
     }
     #endif
-    
+
     // zero terminate command line
     cmdline[cmdline_len] = '\0';
-    
-    print_a("Running: ", -1);
-    print_w(cmdline, cmdline_len);
-    print_a("\n", -1);
-    
+
+    if (getenv("VERBOSE") != NULL) {
+        print_a("Running: ", -1);
+        print_w(cmdline, cmdline_len);
+        print_a("\n", -1);
+    }
+
     // setup startup options
     STARTUPINFOW si;
     GetStartupInfoW(&si);
@@ -851,19 +823,29 @@ next_arg:;
     si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     si.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
-    
+
     // start process
+    PROCESS_INFORMATION pi;
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
         fail("CreateProcessW failed");
     }
-    
-    Reactor_Init(&r);
-    
-    if (!Reactor_AddHandle(&r, pi.hProcess, process_handler, NULL)) {
-        fail("Reactor_AddHandle failed");
+
+    DWORD res = WaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE);
+    assert(res == WAIT_OBJECT_0);
+
+    DWORD exit_code;
+    if (!GetExitCodeProcess(pi.hProcess, &exit_code)) {
+        fail("GetExitCodeProcess failed");
     }
-    
-    // enter reactor
-    Reactor_Exec(&r);
-    return return_value;
+
+    #if defined(WRAP_MT)
+    if (exit_code == MT_MAGIC) {
+        exit_code = MT_MAGIC_CONV;
+    }
+    #endif
+
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+
+    return exit_code;
 }

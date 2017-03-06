@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:sid
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
 ENV HOME="/home/builder"

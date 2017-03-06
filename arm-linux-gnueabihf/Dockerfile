@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:stretch
 
 RUN dpkg --add-architecture armhf \
     && apt-get -qq update \

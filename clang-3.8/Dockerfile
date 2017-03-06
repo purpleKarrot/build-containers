@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:stretch
 
 RUN VERSION=3.8 \
     && apt-get -qq update \

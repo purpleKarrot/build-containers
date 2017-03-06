@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:stretch
 
 RUN true \
     && apt-get -qq update \

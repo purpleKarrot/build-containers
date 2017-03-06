@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:latest
 
 ENV WINEARCH="win32" WINEDEBUG=-all
 ENV VSINSTALLDIR="C:\Program Files\Common Files\Microsoft\Visual C++ for Python\9.0"

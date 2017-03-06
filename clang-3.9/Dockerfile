@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:latest
 
 RUN VERSION=3.9 \
     && apt-get -qq update \

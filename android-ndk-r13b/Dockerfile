@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:latest
 
 RUN true \
     && apt-get -qq update \

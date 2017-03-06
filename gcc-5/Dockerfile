@@ -1,4 +1,4 @@
-FROM purplekarrot/base
+FROM purplekarrot/base:latest
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends g++-5 \

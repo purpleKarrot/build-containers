@@ -4,6 +4,11 @@ DOCKER = docker
 # Docker organization
 ORG = purplekarrot
 
+TAG = $(shell git rev-parse --abbrev-ref HEAD)
+ifeq ($(TAG), master)
+TAG = latest
+endif
+
 # List of builder images
 IMAGES = \
 	android-ndk-r13b \
@@ -23,24 +28,24 @@ IMAGES = \
 all: $(IMAGES)
 
 base:
-	$(DOCKER) build -t $(ORG)/base base
+	$(DOCKER) build -t $(ORG)/base:$(TAG) base
 
 clang-3.8-clazy: clang-3.8
 clang-3.9-clazy: clang-3.9
 
 $(IMAGES): base
-	$(DOCKER) build -t $(ORG)/$@ $@
+	$(DOCKER) build -t $(ORG)/$@:$(TAG) $@
 
 display_images:
 	for image in $(IMAGES); do echo $$image; done
 
 push:
-	docker push $(ORG)/base
-	for image in $(IMAGES); do docker push $(ORG)/$$image; done
+	docker push $(ORG)/base:$(TAG)
+	for image in $(IMAGES); do docker push $(ORG)/$$image:$(TAG); done
 
 pull:
-	docker pull $(ORG)/base
-	for image in $(IMAGES); do docker pull $(ORG)/$$image; done
+	docker pull $(ORG)/base:$(TAG)
+	for image in $(IMAGES); do docker pull $(ORG)/$$image:$(TAG); done
 
 prefix=/usr/local
 

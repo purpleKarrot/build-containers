@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! options=$(getopt -o c: -l clean,config:,test,package -- "$@")
+if ! options=$(getopt -o c: -l clean,config:,test,package,submit -- "$@")
 then
   exit 1
 fi
@@ -58,10 +58,10 @@ args+=("-VV")
 
 while [ $# -gt 0 ]
 do
-  mkdir -p build/$1
+  mkdir -p build/${1%%:*}
   docker run --rm -h $(hostname) \
     -v $(pwd):/source:ro \
-    -v $(pwd)/build/$1:/binary:rw \
+    -v $(pwd)/build/${1%%:*}:/binary:rw \
     -e BUILD_NAME=$1 \
     -e BUILD_MODEL='Experimental' \
     -e BUILDER_UID=$(id -u) \

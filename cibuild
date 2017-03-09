@@ -11,6 +11,7 @@ clean=0
 config=()
 testing=0
 package=0
+submit=0
 verbose=0
 while [ $# -gt 0 ]
 do
@@ -27,6 +28,9 @@ do
       ;;
     --package)
       package=1
+      ;;
+    --submit)
+      submit=1
       ;;
     (--)
       shift
@@ -49,6 +53,7 @@ args+=("-DCLEAN_BUILD=$clean")
 args+=("-DBUILD_CONFIGURATIONS=${config[*]}")
 args+=("-DRUN_TESTS=$testing")
 args+=("-DBUILD_PACKAGES=$package")
+args+=("-DSUBMIT_RESULTS=$submit")
 args+=("-VV")
 
 while [ $# -gt 0 ]

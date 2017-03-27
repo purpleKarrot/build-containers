@@ -13,8 +13,6 @@ endif
 IMAGES = \
 	android-ndk-r13b \
 	arm-linux-gnueabihf \
-	clang-3.8 \
-	clang-3.8-clazy \
 	clang-3.9 \
 	clang-3.9-clazy \
 	clang-4.0 \

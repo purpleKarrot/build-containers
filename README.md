@@ -6,6 +6,14 @@
 
 This is the base for other toolchain images. From [Debian Sid](https://www.debian.org/releases/sid/) with [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/).
 
+### purplekarrot/android-ndk <a href="https://microbadger.com/images/purplekarrot/android-ndk"><img alt="purplekarrot/android-ndk" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/android-ndk.svg"></a>
+
+Contains the [Android NDK](https://developer.android.com/ndk/index.html).
+
+### purplekarrot/android-standalone <a href="https://microbadger.com/images/purplekarrot/android-standalone"><img alt="purplekarrot/android-standalone" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/android-standalone.svg"></a>
+
+Contains a [standalone toolchain](https://developer.android.com/ndk/guides/standalone_toolchain.html).
+
 ### purplekarrot/clang-3.9 <a href="https://microbadger.com/images/purplekarrot/clang-3.9"><img alt="purplekarrot/clang-3.9" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/clang-3.9.svg"></a>
 
 Contains [Clang](http://clang.llvm.org/), [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/), and [Include-What-You-Use](https://include-what-you-use.org/) in version 3.9.

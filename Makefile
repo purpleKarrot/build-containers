@@ -11,8 +11,8 @@ endif
 
 # List of builder images
 IMAGES = \
-	android-ndk-r13b \
-	android-standalone-r13b \
+	android-ndk \
+	android-standalone \
 	arm-linux-gnueabihf \
 	clang-3.9 \
 	clang-3.9-clazy \

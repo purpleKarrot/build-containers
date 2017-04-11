@@ -54,7 +54,7 @@ RUN buildDeps=' \
         ' \
     && apt-get -qq update \
     && apt-get -qq install -y $buildDeps --no-install-recommends \
-    && git clone -b v3.8.0-rc4 --depth 1 git://cmake.org/cmake.git CMake \
+    && git clone -b v3.8.0 --depth 1 git://cmake.org/cmake.git CMake \
     && cd CMake \
     && mkdir build \
     && cd build \

@@ -51,9 +51,4 @@ pull:
 	docker pull $(ORG)/base:$(TAG)
 	for image in $(IMAGES); do docker pull $(ORG)/$$image:$(TAG); done
 
-prefix=/usr/local
-
-install:
-	install -m 0755 cibuild $(prefix)/bin
-
 .PHONY: base $(IMAGES)

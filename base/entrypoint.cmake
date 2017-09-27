@@ -1,43 +1,44 @@
+cmake_minimum_required(VERSION 3.9)
 set(CTEST_RUN_CURRENT_SCRIPT 0)
-
-set(BUILD_MODEL "$ENV{BUILD_MODEL}")
-set(CTEST_CHANGE_ID "$ENV{CHANGE_ID}")
-
-if(EXISTS "/toolchain.cmake")
-  set(toolchain_arg ";-DCMAKE_TOOLCHAIN_FILE:FILEPATH=/toolchain.cmake")
-endif()
-
-include(ProcessorCount)
-ProcessorCount(nproc)
-if(NOT nproc EQUAL 0)
-  set(TEST_ARGS "PARALLEL_LEVEL ${nproc}")
-endif()
 
 if(NOT BUILD_CONFIGURATIONS)
   message(FATAL_ERROR "Nothing to build!")
 endif()
 
-set(prefix_arg ";-DCMAKE_INSTALL_PREFIX:PATH=/prefix")
+set(config_options)
+if(EXISTS "/cache.cmake")
+  list(APPEND config_options "-C/cache.cmake")
+endif()
+if(EXISTS "/toolchain.cmake")
+  list(APPEND config_options "-DCMAKE_TOOLCHAIN_FILE:FILEPATH=/toolchain.cmake")
+endif()
+list(APPEND config_options "-DCMAKE_INSTALL_PREFIX:PATH=/prefix")
 
-foreach(config ${BUILD_CONFIGURATIONS})
-  set(BUILD_CONFIG "${config}")
-  set(config_arg "-DCMAKE_BUILD_TYPE:STRING=${config}")
-  set(CONFIGURE_ARGS "OPTIONS \"${config_arg}${prefix_arg}${toolchain_arg}\"")
-  configure_file("/build.cmake" "/binary/build-${config}.cmake" @ONLY)
-  list(APPEND _run_scripts "/binary/build-${config}.cmake")
-  list(APPEND _install_projects "/binary/${config};\${CPACK_PACKAGE_NAME};ALL;/")
+include(ProcessorCount)
+ProcessorCount(NPROC)
+if(NPROC LESS 1)
+  set(NPROC 1)
+endif()
+
+set(run_scripts)
+set(install_projects)
+foreach(CONFIG IN LISTS BUILD_CONFIGURATIONS)
+  set(CONFIGURE_OPTIONS ${config_options} "-DCMAKE_BUILD_TYPE:STRING=${CONFIG}")
+  configure_file("/build.cmake" "/binary/build-${CONFIG}.cmake" @ONLY)
+  list(APPEND run_scripts "/binary/build-${CONFIG}.cmake")
+  list(APPEND install_projects "/binary/${CONFIG};\${CPACK_PACKAGE_NAME};ALL;/")
 endforeach()
 
-ctest_run_script(${_run_scripts} RETURN_VALUE ret)
+ctest_run_script(${run_scripts} RETURN_VALUE ret)
 if(NOT ret EQUAL 0)
   message(FATAL_ERROR "Failed to run build script.")
 endif()
 
-if(BUILD_PACKAGES)
-  list(GET BUILD_CONFIGURATIONS 0 _first_config)
+if("package" IN_LIST BUILD_STEPS)
+  list(GET BUILD_CONFIGURATIONS 0 first_config)
   file(WRITE "/binary/CPackConfig.cmake"
-    "include(\"/binary/${_first_config}/CPackConfig.cmake\")\n"
-    "set(CPACK_INSTALL_CMAKE_PROJECTS \"${_install_projects}\")\n"
+    "include(\"/binary/${first_config}/CPackConfig.cmake\")\n"
+    "set(CPACK_INSTALL_CMAKE_PROJECTS \"${install_projects}\")\n"
     )
   execute_process(COMMAND cpack --config ./CPackConfig.cmake
     WORKING_DIRECTORY "/binary"

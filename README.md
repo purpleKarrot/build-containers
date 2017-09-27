@@ -34,6 +34,10 @@ Same as purplekarrot/clang-4.0, but uses [Clazy](https://github.com/KDE/clazy) a
 
 Contains [Clang](http://clang.llvm.org/) and [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/) in version 5.0.
 
+### purplekarrot/clang-6.0 <a href="https://microbadger.com/images/purplekarrot/clang-6.0"><img alt="purplekarrot/clang-6.0" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/clang-6.0.svg"></a>
+
+Contains [Clang](http://clang.llvm.org/) and [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/) in version 6.0.
+
 ### purplekarrot/gcc-5 <a href="https://microbadger.com/images/purplekarrot/gcc-5"><img alt="purplekarrot/gcc-5" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/gcc-5.svg"></a>
 
 Uses [GCC](https://gcc.gnu.org/) version 5.

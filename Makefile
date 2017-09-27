@@ -19,6 +19,7 @@ IMAGES = \
 	clang-4.0 \
 	clang-4.0-clazy \
 	clang-5.0 \
+	clang-6.0 \
 	gcc-5 \
 	gcc-6 \
 	gcc-7 \
@@ -33,7 +34,6 @@ all: $(IMAGES)
 base:
 	$(DOCKER) build -t $(ORG)/base:$(TAG) base
 
-clang-3.8-clazy: clang-3.8
 clang-3.9-clazy: clang-3.9
 clang-4.0-clazy: clang-4.0
 

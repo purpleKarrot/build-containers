@@ -14,5 +14,6 @@ RUN VERSION=3.9 \
     && rm -rf /tmp/clang-tidy \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CC="/usr/bin/clang-3.9" \
-    CXX="/usr/bin/clang++-3.9"
+ENV CC="/usr/lib/llvm-3.9/bin/clang" \
+    CXX="/usr/lib/llvm-3.9/bin/clang++" \
+    PATH=/usr/lib/llvm-3.9/bin:$PATH

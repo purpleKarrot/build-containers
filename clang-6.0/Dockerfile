@@ -14,6 +14,6 @@ RUN VERSION=6.0 \
     && rm -rf /tmp/clang-tidy \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CC="/usr/bin/clang-6.0" \
-    CXX="/usr/bin/clang++-6.0"
-
+ENV CC="/usr/lib/llvm-6.0/bin/clang" \
+    CXX="/usr/lib/llvm-6.0/bin/clang++" \
+    PATH=/usr/lib/llvm-6.0/bin:$PATH

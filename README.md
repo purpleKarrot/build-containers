@@ -50,6 +50,10 @@ Uses [GCC](https://gcc.gnu.org/) version 6.
 
 Uses [GCC](https://gcc.gnu.org/) version 7.
 
+### purplekarrot/gcc-8 <a href="https://microbadger.com/images/purplekarrot/gcc-8"><img alt="purplekarrot/gcc-8" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/gcc-8.svg"></a>
+
+Uses [GCC](https://gcc.gnu.org/) version 8.
+
 ### purplekarrot/mingw-w64-i686 <a href="https://microbadger.com/images/purplekarrot/mingw-w64-i686"><img alt="purplekarrot/mingw-w64-i686" align="right" src="https://images.microbadger.com/badges/image/purplekarrot/mingw-w64-i686.svg"></a>
 
 Uses MinGW to target 32bit Windows. It uses [Wine](https://www.winehq.org/) as crosscompiling emulator and [NSIS](http://nsis.sourceforge.net/) to create packages.

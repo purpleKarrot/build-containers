@@ -23,6 +23,7 @@ IMAGES = \
 	gcc-5 \
 	gcc-6 \
 	gcc-7 \
+	gcc-8 \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \
 	msvc-9.0 \

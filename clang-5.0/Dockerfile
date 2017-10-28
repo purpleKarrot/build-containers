@@ -17,8 +17,3 @@ RUN VERSION=5.0 \
 ENV CC="/usr/bin/clang-5.0" \
     CXX="/usr/bin/clang++-5.0"
 
-RUN echo '\
-if(EXISTS \"/source/.clang-tidy\")\n\
-  set(CMAKE_CXX_CLANG_TIDY \"/usr/bin/clang-tidy-5.0\" CACHE INTERNAL \"\" FORCE)\n\
-endif()\n\
-' >> /toolchain.cmake

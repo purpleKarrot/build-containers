@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 set(CTEST_RUN_CURRENT_SCRIPT 0)
 
-if(NOT BUILD_CONFIGURATIONS)
+if(NOT BUILD_CONFIGURATIONS OR NOT BUILD_STEPS)
   message(FATAL_ERROR "Nothing to build!")
 endif()
 
@@ -14,19 +14,15 @@ if(EXISTS "/toolchain.cmake")
 endif()
 list(APPEND config_options "-DCMAKE_INSTALL_PREFIX:PATH=/prefix")
 
-include(ProcessorCount)
-ProcessorCount(NPROC)
-if(NPROC LESS 1)
-  set(NPROC 1)
-endif()
+cmake_host_system_information(RESULT NPROC QUERY NUMBER_OF_LOGICAL_CORES)
 
 set(run_scripts)
-set(install_projects)
+set(pack_projects)
 foreach(CONFIG IN LISTS BUILD_CONFIGURATIONS)
   set(CONFIGURE_OPTIONS ${config_options} "-DCMAKE_BUILD_TYPE:STRING=${CONFIG}")
   configure_file("/build.cmake" "/binary/build-${CONFIG}.cmake" @ONLY)
   list(APPEND run_scripts "/binary/build-${CONFIG}.cmake")
-  list(APPEND install_projects "/binary/${CONFIG};\${CPACK_PACKAGE_NAME};ALL;/")
+  list(APPEND pack_projects "/binary/${CONFIG};\${CPACK_PACKAGE_NAME};ALL;/")
 endforeach()
 
 ctest_run_script(${run_scripts} RETURN_VALUE ret)
@@ -38,7 +34,7 @@ if("package" IN_LIST BUILD_STEPS)
   list(GET BUILD_CONFIGURATIONS 0 first_config)
   file(WRITE "/binary/CPackConfig.cmake"
     "include(\"/binary/${first_config}/CPackConfig.cmake\")\n"
-    "set(CPACK_INSTALL_CMAKE_PROJECTS \"${install_projects}\")\n"
+    "set(CPACK_INSTALL_CMAKE_PROJECTS \"${pack_projects}\")\n"
     )
   execute_process(COMMAND cpack --config ./CPackConfig.cmake
     WORKING_DIRECTORY "/binary"

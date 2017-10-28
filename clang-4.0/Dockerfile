@@ -1,5 +1,17 @@
 FROM purplekarrot/base:latest
 
+# install iwyu without pulling the python dependency
+RUN apt-get -qq update \
+    && mkdir /tmp/iwyu \
+    && chown _apt /tmp/iwyu \
+    && cd /tmp/iwyu \
+    && apt-get -qq download iwyu \
+    && dpkg -x iwyu_*.deb . \
+    && cp usr/bin/include-what-you-use /usr/local/bin \
+    && cd / \
+    && rm -rf /tmp/iwyu \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN VERSION=4.0 \
     && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends clang-${VERSION} \

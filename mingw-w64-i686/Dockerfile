@@ -20,12 +20,4 @@ RUN buildDeps='procps' \
     && apt-get -qq purge --auto-remove -y $buildDeps \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo '\
-set(CMAKE_SYSTEM_NAME Windows)\n\
-\n\
-set(CMAKE_C_COMPILER   \"/usr/bin/i686-w64-mingw32-gcc\")\n\
-set(CMAKE_CXX_COMPILER \"/usr/bin/i686-w64-mingw32-g++\")\n\
-set(CMAKE_RC_COMPILER  \"/usr/bin/i686-w64-mingw32-windres\")\n\
-\n\
-set(CMAKE_CROSSCOMPILING_EMULATOR \"/usr/bin/wine\")\n\
-' >> /toolchain.cmake
+COPY toolchain.cmake .

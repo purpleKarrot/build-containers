@@ -5,7 +5,8 @@ RUN true \
     && apt-get -qq install -y --no-install-recommends qemu-user \
     && rm -rf /var/lib/apt/lists/*
 
-RUN buildDeps='curl file python unzip' revision='14b' \
+RUN buildDeps='curl file python2 unzip' revision='14b' \
+    && ln -s python2 /usr/bin/python \
     && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends $buildDeps \
     && mkdir /tmp/android-ndk \

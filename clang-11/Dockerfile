@@ -12,7 +12,7 @@ RUN apt-get -qq update \
     && rm -rf /tmp/iwyu \
     && rm -rf /var/lib/apt/lists/*
 
-RUN VERSION=4.0 \
+RUN VERSION=11 \
     && apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends clang-${VERSION} \
     && mkdir /tmp/clang-tidy \
@@ -26,6 +26,6 @@ RUN VERSION=4.0 \
     && rm -rf /tmp/clang-tidy \
     && rm -rf /var/lib/apt/lists/*
 
-ENV CC="/usr/lib/llvm-4.0/bin/clang" \
-    CXX="/usr/lib/llvm-4.0/bin/clang++" \
-    PATH=/usr/lib/llvm-4.0/bin:$PATH
+ENV CC="/usr/lib/llvm-11/bin/clang" \
+    CXX="/usr/lib/llvm-11/bin/clang++" \
+    PATH=/usr/lib/llvm-11/bin:$PATH

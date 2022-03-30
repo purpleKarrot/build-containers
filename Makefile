@@ -14,19 +14,11 @@ IMAGES = \
 	android-ndk \
 	android-standalone \
 	arm-linux-gnueabihf \
-	clang-3.9 \
-	clang-3.9-clazy \
-	clang-4.0 \
-	clang-4.0-clazy \
-	clang-5.0 \
-	clang-6.0 \
-	gcc-5 \
-	gcc-6 \
-	gcc-7 \
-	gcc-8 \
+	clang-11 \
+	clang-11-clazy \
+	gcc-10 \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \
-	msvc-9.0 \
 	wine32-gcc \
 	wine64-gcc
 
@@ -35,8 +27,7 @@ all: $(IMAGES)
 base:
 	$(DOCKER) build -t $(ORG)/base:$(TAG) base
 
-clang-3.9-clazy: clang-3.9
-clang-4.0-clazy: clang-4.0
+clang-11-clazy: clang-11
 
 $(IMAGES): base
 	$(DOCKER) build -t $(ORG)/$@:$(TAG) $@

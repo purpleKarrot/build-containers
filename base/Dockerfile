@@ -1,4 +1,4 @@
-FROM debian:sid
+FROM debian:bullseye-slim
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
 ENV HOME="/home/builder"

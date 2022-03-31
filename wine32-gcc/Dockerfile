@@ -13,10 +13,6 @@ ENV CC="/usr/bin/winegcc" \
     CXX="/usr/bin/wineg++" \
     WINEARCH=win32
 
-RUN buildDeps='procps' \
-    && apt-get -qq update \
-    && apt-get -qq install -y $buildDeps --no-install-recommends \
+RUN true \
     && wine hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done \
-    && apt-get -qq purge --auto-remove -y $buildDeps \
-    && rm -rf /var/lib/apt/lists/*
+    && while pgrep wineserver > /dev/null; do sleep 1; done

@@ -12,12 +12,8 @@ RUN true \
 ENV WINEARCH=win64 \
     WINEPATH=/usr/lib/gcc/x86_64-w64-mingw32/6.2-win32/
 
-RUN buildDeps='procps' \
-    && apt-get -qq update \
-    && apt-get -qq install -y $buildDeps --no-install-recommends \
+RUN true \
     && wine64 hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done \
-    && apt-get -qq purge --auto-remove -y $buildDeps \
-    && rm -rf /var/lib/apt/lists/*
+    && while pgrep wineserver > /dev/null; do sleep 1; done
 
 COPY toolchain.cmake .

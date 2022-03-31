@@ -12,12 +12,8 @@ RUN dpkg --add-architecture i386 \
 ENV WINEARCH=win32 \
     WINEPATH=/usr/lib/gcc/i686-w64-mingw32/6.2-win32/
 
-RUN buildDeps='procps' \
-    && apt-get -qq update \
-    && apt-get -qq install -y $buildDeps --no-install-recommends \
+RUN true \
     && wine hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done \
-    && apt-get -qq purge --auto-remove -y $buildDeps \
-    && rm -rf /var/lib/apt/lists/*
+    && while pgrep wineserver > /dev/null; do sleep 1; done
 
 COPY toolchain.cmake .

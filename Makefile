@@ -43,7 +43,7 @@ test-%: %
 	  --volume $(shell pwd)/_prefix/$<:/prefix \
 	  $(ORG)/$< \
 	  -DBUILD_CONFIGURATIONS="Release;Debug" \
-	  -DBUILD_STEPS="configure;build" \
+	  -DBUILD_STEPS="clean;configure;build;test" \
 	  --extra-verbose
 
 display_images:

@@ -2,7 +2,7 @@ FROM purplekarrot/base:latest
 
 RUN true \
     && apt-get -qq update \
-    && apt-get -qq install -y --no-install-recommends qemu-user \
+    && apt-get -qq install -y --no-install-recommends qemu-user libncurses5 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN buildDeps='curl file python2 unzip' revision='14b' \

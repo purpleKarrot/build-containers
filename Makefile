@@ -24,13 +24,27 @@ IMAGES = \
 
 all: $(IMAGES)
 
+test: $(addprefix test-,$(IMAGES))
+
 base:
-	$(DOCKER) build -t $(ORG)/base:$(TAG) base
+	$(DOCKER) build -t $(ORG)/base:$(TAG) _base
 
 clang-11-clazy: clang-11
 
 $(IMAGES): base
 	$(DOCKER) build -t $(ORG)/$@:$(TAG) $@
+
+test-%: %
+	mkdir -p _binary/$<
+	mkdir -p _prefix/$<
+	docker run --rm \
+	  --volume $(shell pwd)/_test:/source:ro \
+	  --volume $(shell pwd)/_binary/$<:/binary \
+	  --volume $(shell pwd)/_prefix/$<:/prefix \
+	  $(ORG)/$< \
+	  -DBUILD_CONFIGURATIONS="Release;Debug" \
+	  -DBUILD_STEPS="configure;build" \
+	  --extra-verbose
 
 display_images:
 	for image in $(IMAGES); do echo $$image; done

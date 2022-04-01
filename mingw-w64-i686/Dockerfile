@@ -12,8 +12,4 @@ RUN dpkg --add-architecture i386 \
 ENV WINEARCH=win32 \
     WINEPATH=/usr/lib/gcc/i686-w64-mingw32/6.2-win32/
 
-RUN true \
-    && wine hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done
-
 COPY toolchain.cmake .

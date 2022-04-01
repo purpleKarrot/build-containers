@@ -12,7 +12,3 @@ RUN true \
 ENV CC="/usr/bin/winegcc" \
     CXX="/usr/bin/wineg++" \
     WINEARCH=win64
-
-RUN true \
-    && wine64 hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done

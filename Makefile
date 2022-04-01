@@ -1,6 +1,10 @@
 # Name of the docker executable
 DOCKER = docker
 
+ifeq ($(UNAME), Linux)
+USER_ARG = --user $(shell id --user):$(shell id --group)
+endif
+
 # Docker organization
 ORG = purplekarrot
 
@@ -35,16 +39,17 @@ $(IMAGES): base
 	$(DOCKER) build -t $(ORG)/$@:$(TAG) $@
 
 test-%: %
-	mkdir -p _binary/$<
-	mkdir -p _prefix/$<
-	docker run --rm \
-	  --volume $(shell pwd)/_test:/source:ro \
-	  --volume $(shell pwd)/_binary/$<:/binary \
-	  --volume $(shell pwd)/_prefix/$<:/prefix \
-	  $(ORG)/$< \
-	  -DBUILD_CONFIGURATIONS="Release;Debug" \
-	  -DBUILD_STEPS="clean;configure;build;test" \
-	  --extra-verbose
+	mkdir -p $(shell pwd)/_out/$</home
+	docker run --rm $(USER_ARG) \
+		--env HOME=/home \
+		--volume $(shell pwd)/_test:/source:ro \
+		--volume $(shell pwd)/_out/$</home:/home \
+		--volume $(shell pwd)/_out/$</binary:/binary \
+		--volume $(shell pwd)/_out/$</prefix:/prefix \
+		$(ORG)/$< \
+		-DBUILD_CONFIGURATIONS="Release;Debug" \
+		-DBUILD_STEPS="clean;configure;build;test" \
+		--extra-verbose
 
 display_images:
 	for image in $(IMAGES); do echo $$image; done

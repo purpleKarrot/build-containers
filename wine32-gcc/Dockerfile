@@ -12,7 +12,3 @@ RUN dpkg --add-architecture i386 \
 ENV CC="/usr/bin/winegcc" \
     CXX="/usr/bin/wineg++" \
     WINEARCH=win32
-
-RUN true \
-    && wine hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done

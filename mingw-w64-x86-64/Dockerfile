@@ -12,8 +12,4 @@ RUN true \
 ENV WINEARCH=win64 \
     WINEPATH=/usr/lib/gcc/x86_64-w64-mingw32/6.2-win32/
 
-RUN true \
-    && wine64 hostname > /dev/null \
-    && while pgrep wineserver > /dev/null; do sleep 1; done
-
 COPY toolchain.cmake .

@@ -20,11 +20,11 @@ IMAGES = \
 	arm-linux-gnueabihf \
 	clang-11 \
 	clang-11-clazy \
-	gcc-10 \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \
 	wine32-gcc \
-	wine64-gcc
+	wine64-gcc \
+	x86-64-linux-gnu
 
 all: $(IMAGES)
 

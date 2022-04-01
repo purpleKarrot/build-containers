@@ -22,10 +22,6 @@ Contains [Clang](http://clang.llvm.org/), [Clang-Tidy](http://clang.llvm.org/ext
 
 Same as purplekarrot/clang-11, but uses [Clazy](https://github.com/KDE/clazy) as the C++ compiler.
 
-### purplekarrot/gcc-10 <a href="https://hub.docker.com/r/purplekarrot/gcc-10"><img alt="purplekarrot/gcc-10" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/gcc-10"></a>
-
-Uses [GCC](https://gcc.gnu.org/) version 10.
-
 ### purplekarrot/mingw-w64-i686 <a href="https://hub.docker.com/r/purplekarrot/mingw-w64-i686"><img alt="purplekarrot/mingw-w64-i686" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/mingw-w64-i686"></a>
 
 Uses MinGW to target 32bit Windows. It uses [Wine](https://www.winehq.org/) as crosscompiling emulator and [NSIS](http://nsis.sourceforge.net/) to create packages.
@@ -33,3 +29,7 @@ Uses MinGW to target 32bit Windows. It uses [Wine](https://www.winehq.org/) as c
 ### purplekarrot/mingw-w64-x86-64 <a href="https://hub.docker.com/r/purplekarrot/mingw-w64-x86-64"><img alt="purplekarrot/mingw-w64-x86-64" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/mingw-w64-x86-64"></a>
 
 Uses MinGW to target 64bit Windows. It uses [Wine](https://www.winehq.org/) as crosscompiling emulator and [NSIS](http://nsis.sourceforge.net/) to create packages.
+
+### purplekarrot/x86-64-linux-gnu <a href="https://hub.docker.com/r/purplekarrot/x86-64-linux-gnu"><img alt="purplekarrot/x86-64-linux-gnu" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/x86-64-linux-gnu"></a>
+
+Uses the [GNU compiler](https://gcc.gnu.org/) and targets the amd64 architecture.

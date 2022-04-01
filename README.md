@@ -6,6 +6,18 @@
 
 This is the base for other toolchain images. From [Debian 11](https://www.debian.org/releases/bullseye/) with [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/).
 
+### purplekarrot/x86-64-linux-gnu <a href="https://hub.docker.com/r/purplekarrot/x86-64-linux-gnu"><img alt="purplekarrot/x86-64-linux-gnu" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/x86-64-linux-gnu"></a>
+
+Uses the [GNU compiler](https://gcc.gnu.org/) and targets the amd64 architecture.
+
+### purplekarrot/aarch64-linux-gnu <a href="https://hub.docker.com/r/purplekarrot/aarch64-linux-gnu"><img alt="purplekarrot/aarch64-linux-gnu" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/aarch64-linux-gnu"></a>
+
+Uses the [GNU compiler](https://gcc.gnu.org/) and targets the arm64 architecture.
+
+### purplekarrot/arm-linux-gnueabihf <a href="https://hub.docker.com/r/purplekarrot/arm-linux-gnueabihf"><img alt="purplekarrot/arm-linux-gnueabihf" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/arm-linux-gnueabihf"></a>
+
+Uses the [GNU compiler](https://gcc.gnu.org/) and targets the armhf architecture.
+
 ### purplekarrot/android-ndk <a href="https://hub.docker.com/r/purplekarrot/android-ndk"><img alt="purplekarrot/android-ndk" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/android-ndk"></a>
 
 Contains the [Android NDK](https://developer.android.com/ndk/index.html).
@@ -29,7 +41,3 @@ Uses MinGW to target 32bit Windows. It uses [Wine](https://www.winehq.org/) as c
 ### purplekarrot/mingw-w64-x86-64 <a href="https://hub.docker.com/r/purplekarrot/mingw-w64-x86-64"><img alt="purplekarrot/mingw-w64-x86-64" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/mingw-w64-x86-64"></a>
 
 Uses MinGW to target 64bit Windows. It uses [Wine](https://www.winehq.org/) as crosscompiling emulator and [NSIS](http://nsis.sourceforge.net/) to create packages.
-
-### purplekarrot/x86-64-linux-gnu <a href="https://hub.docker.com/r/purplekarrot/x86-64-linux-gnu"><img alt="purplekarrot/x86-64-linux-gnu" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/x86-64-linux-gnu"></a>
-
-Uses the [GNU compiler](https://gcc.gnu.org/) and targets the amd64 architecture.

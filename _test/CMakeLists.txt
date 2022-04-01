@@ -4,7 +4,7 @@ project(Test)
 include(CTestUseLaunchers)
 enable_testing()
 
-add_executable(main main.c)
+add_executable(main main.cpp)
 
 add_test(NAME main COMMAND main)
 set_tests_properties(main PROPERTIES PASS_REGULAR_EXPRESSION "hello")

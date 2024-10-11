@@ -20,8 +20,8 @@ IMAGES = \
 	arm-linux-gnueabihf \
 	android-ndk \
 	android-standalone \
-	clang-11 \
-	clang-11-clazy \
+	clang \
+	clazy \
 	mingw-w64-i686 \
 	mingw-w64-x86-64 \
 	wine32-gcc \
@@ -34,7 +34,7 @@ test: $(addprefix test-,$(IMAGES))
 base:
 	$(DOCKER) build -t $(ORG)/base:$(TAG) _base
 
-clang-11-clazy: clang-11
+clazy: clang
 
 $(IMAGES): base
 	$(DOCKER) build -t $(ORG)/$@:$(TAG) $@

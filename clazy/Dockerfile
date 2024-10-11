@@ -1,4 +1,4 @@
-FROM purplekarrot/clang-11
+FROM purplekarrot/clang
 
 RUN true \
     && apt-get -qq update \

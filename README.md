@@ -26,13 +26,13 @@ Contains the [Android NDK](https://developer.android.com/ndk/index.html).
 
 Contains a [standalone toolchain](https://developer.android.com/ndk/guides/standalone_toolchain.html).
 
-### purplekarrot/clang-11 <a href="https://hub.docker.com/r/purplekarrot/clang-11"><img alt="purplekarrot/clang-11" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/clang-11"></a>
+### purplekarrot/clang <a href="https://hub.docker.com/r/purplekarrot/clang"><img alt="purplekarrot/clang" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/clang"></a>
 
 Contains [Clang](http://clang.llvm.org/), [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/), and [Include-What-You-Use](https://include-what-you-use.org/) in version 11.
 
-### purplekarrot/clang-11-clazy <a href="https://hub.docker.com/r/purplekarrot/clang-11-clazy"><img alt="purplekarrot/clang-11-clazy" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/clang-11-clazy"></a>
+### purplekarrot/clazy <a href="https://hub.docker.com/r/purplekarrot/clazy"><img alt="purplekarrot/clazy" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/clazy"></a>
 
-Same as purplekarrot/clang-11, but uses [Clazy](https://github.com/KDE/clazy) as the C++ compiler.
+Same as purplekarrot/clang, but uses [Clazy](https://github.com/KDE/clazy) as the C++ compiler.
 
 ### purplekarrot/mingw-w64-i686 <a href="https://hub.docker.com/r/purplekarrot/mingw-w64-i686"><img alt="purplekarrot/mingw-w64-i686" align="right" src="https://img.shields.io/docker/image-size/purplekarrot/mingw-w64-i686"></a>
 

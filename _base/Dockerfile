@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:12-slim
 MAINTAINER Daniel Pfeifer "daniel@pfeifer-mail.de"
 
 RUN true \

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.25)
 set(CTEST_RUN_CURRENT_SCRIPT 0)
 
 set(CTEST_SOURCE_DIRECTORY "/source")
